@@ -35,7 +35,7 @@ export function LoginPage(props: ExternalActionProps & ExternalProps) {
     const [error, setError] = useState<any>(EmptyError);
 
     if (isLoggedIn) {
-        window.location.href = process.env.REACT_APP_BASE_HREF || '/bosch-aic';
+        window.location.href = process.env.REACT_APP_BASE_HREF || '/';
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -49,7 +49,7 @@ export function LoginPage(props: ExternalActionProps & ExternalProps) {
         if (!userName || userName.trim().length === 0) {
             errorNew.userName = {
                 isError: true,
-                text: 'User name is mandatory'
+                text: 'Username is mandatory'
             }
 
             isInvalid = true;
@@ -73,7 +73,7 @@ export function LoginPage(props: ExternalActionProps & ExternalProps) {
 
     return (
         <React.Fragment>
-            <div style={{backgroundImage: 'url(../../assets/login_background.png)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundSize: '100% auto'}}>
+            <div style={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                 <Grid>
                     <ThemeProvider theme={theme}>
                         <Container component="main" maxWidth="xs">

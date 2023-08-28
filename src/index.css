@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#appHeader {
+  background-color: #fff;
+  color: #333175;
+}
+
+.menu-canvas-container {
+  color: #333175;
+}

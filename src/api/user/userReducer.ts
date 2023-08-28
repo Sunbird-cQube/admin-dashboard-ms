@@ -17,7 +17,7 @@ const initialState: UserState = {
     role: parsedUserDetails ? parsedUserDetails.role : '',
     userId: parsedUserDetails ? parsedUserDetails.userId : '',
     userName: parsedUserDetails ? parsedUserDetails.userName : '',
-    isLoggedIn: parsedUserDetails ? true : false,
+    isLoggedIn: true,
     isError: false,
     isLoading: false,
     loginAttemptFailed: false

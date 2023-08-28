@@ -1,4 +1,4 @@
-import AppRoot from './app-root.component';
+import AppHeader from './app-header.component';
 import { connect } from 'react-redux';
 import { logout } from '../../api/user/userAction';
 
@@ -13,4 +13,4 @@ const mapStateToProps = (state: any) => ({
     isLoggedIn: state.userPage.isLoggedIn
 });
 
-export const AppRootContainer = connect(mapStateToProps, mapDispatchToProps)(AppRoot);
+export const AppHeaderContainer = connect(mapStateToProps, mapDispatchToProps)(AppHeader);
