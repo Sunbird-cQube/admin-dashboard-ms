@@ -3,8 +3,7 @@ import axios from 'axios';
 import store from '../../store';
 import FormData from "form-data";
 
-const apiUrl = process.env.REACT_APP_API_URL;
-const baseHref = process.env.REACT_APP_BASE_HREF;
+const apiUrl = process.env.API_URL;
 const userId = store.getState().userPage.userId;
 
 export const userLoginInit = () => ({
@@ -33,15 +32,14 @@ export const userLogoutSuccess = () => ({
 });
 
 export const login = (data: { username: string, password: string, grant_type: string }) => {
-    const header = { headers: { Authorization: `Basic ${process.env.REACT_APP_AUTH_CODE}` } };
-    const params = new FormData();
-    params.append("grant_type", 'password');
-    params.append("username", data.username);
-    params.append("password", data.password);
+    const payload = {
+        username: data.username,
+        password: data.password
+    }
 
     return (dispatch: any) => {
         dispatch(userLoginInit());
-        axios.post(`${apiUrl}/login`, params, header)
+        axios.post(`${apiUrl}/login`, payload)
             .then((response) => {
                 console.log("Response: ", response);
                 //dispatch(getUserDetail(response.data.access_token));
