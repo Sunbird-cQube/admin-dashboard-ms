@@ -1,5 +1,7 @@
 import { useState } from "react";
 import papa from "papaparse";
+import swal from "sweetalert";
+import { IoMdArrowBack } from "react-icons/io";
 
 const HomePage = () => {
   const [selectedOption, setSelectedOption] = useState("event grammar");
@@ -40,7 +42,7 @@ const HomePage = () => {
           const responseData = await response.json();
           console.log(responseData);
           setErrordata(responseData.errors);
-          // handle response
+          swal("", "File uploaded successfully", "success");
         } else {
           console.log("Error uploading file");
         }
@@ -48,7 +50,7 @@ const HomePage = () => {
         console.error(error);
       }
     } else {
-      console.warn("No file selected");
+      swal("", "No File Selected", "warn");
     }
   };
 
@@ -75,6 +77,15 @@ const HomePage = () => {
   return (
     <div className="flex items-center justfy-center h-full text-black">
       <div className="bg-white h-[60vh] sm:h-[80vh] w-[80vw] m-auto rounded-lg p-6">
+        {showTable ? (
+          <IoMdArrowBack
+            size="2rem"
+            className="cursor-pointer"
+            onClick={() => setShowTable(false)}
+          />
+        ) : (
+          <></>
+        )}
         {!showTable ? (
           <>
             <p className="pb-2">Select type of data to be debugged</p>
@@ -106,18 +117,20 @@ const HomePage = () => {
                 <input
                   type="radio"
                   name="option"
-                  id="event"
+                  id="event grammar"
                   className="hidden"
-                  checked={selectedOption === "event"}
+                  checked={selectedOption === "event grammar"}
                   onChange={() => handleOptionChange("event grammar")}
                 />
                 <label
-                  htmlFor="event"
+                  htmlFor="event grammar"
                   className="px-2 cursor-pointer select-none inline-flex items-center"
                 >
                   <span
                     className={`w-4 h-4 inline-block mr-1 rounded-full transition-all duration-300 ${
-                      selectedOption === "event" ? "bg-blue-500" : "bg-gray-300"
+                      selectedOption === "event grammar"
+                        ? "bg-blue-500"
+                        : "bg-gray-300"
                     }`}
                   ></span>
                   Event
@@ -127,7 +140,7 @@ const HomePage = () => {
 
             <div className="flex items-center sm:flex-row flex-col justify-center sm:justify-start text-center sm:text-left m-auto">
               <div className="mt-4">
-                <label htmlFor="schema">Select Dimension/Event schema</label>
+                <label htmlFor="schema">Select Dimension / Event schema</label>
                 <br></br>
                 <select
                   name="schema"
@@ -158,28 +171,29 @@ const HomePage = () => {
             </div>
             <div className="text-center sm:text-left">
               <button
-                className="py-2 px-4 bg-indigo-900 text-white rounded-lg mt-4 cursor-pointer"
+                className="py-2 px-4 bg-indigo-900 text-white rounded-lg mt-4 cursor-pointer disabled:opacity-50"
                 onClick={handleDebug}
+                disabled={tabledata?.length === 0}
               >
                 Start Debugging
               </button>
             </div>
           </>
         ) : (
-          // TABLE CODE
-          <div className="relative overflow-auto sm:rounded-lg w-[100%] h-[80%]">
-            <table className="w-full text-sm text-left text-gray-500">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <div className="overflow-auto sm:rounded-lg w-[100%] max-h-[85%]">
+            <table className="w-full text-sm text-left text-black mt-4">
+              <thead className="text-xs text-black uppercase bg-gray-50">
                 {tabledata?.map(
                   (data: any, index: any) =>
                     index == 0 && (
-                      <tr className="bg-gray-100 border-b" key={index}>
+                      <tr
+                        className="bg-gray-100 border-2 border-dashed border-[#e1edff]"
+                        key={index}
+                      >
                         {data?.map((row: any, ind: any) => (
                           <th
                             className={`px-6 py-4 text-center ${
-                              row?.error
-                                ? "bg-red-200 cursor-pointer"
-                                : "bg-green-200"
+                              row?.error && "bg-red-200 cursor-pointer"
                             }`}
                             key={ind}
                             title={row?.error ? row?.error : ""}
@@ -200,9 +214,7 @@ const HomePage = () => {
                           <>
                             <td
                               className={`px-6 py-4 text-center ${
-                                columnData?.error
-                                  ? "bg-red-200 cursor-pointer"
-                                  : "bg-green-200"
+                                columnData?.error && "bg-red-200 cursor-pointer"
                               } font-regular`}
                               key={column}
                               title={columnData?.error ? columnData?.error : ""}
