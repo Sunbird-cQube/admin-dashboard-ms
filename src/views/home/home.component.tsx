@@ -7,17 +7,12 @@ export function HomePage(props: any) {
         {
             title: 'System monitoring',
             imageUrl: '/assets/images/Healthcare.png',
-            link: 'https://www.google.com'
+            link: process.env.REACT_APP_HEALTH_DASHBOARD_URL
         },
         {
             title: 'Usage Dashboard',
             imageUrl: '/assets/images/Calendar.png',
-            link: 'https://www.google.com'
-        },
-        {
-            title: 'Usage Dashboard',
-            imageUrl: '/assets/images/Calendar.png',
-            link: 'https://www.google.com'
+            link: process.env.REACT_APP_POSTHOG_URL
         }
     ];
 
@@ -29,7 +24,7 @@ export function HomePage(props: any) {
         <React.Fragment>
             <Grid container spacing={5}>
                 {cards.map(card => (
-                    <Grid key={card.title} item xs={4}>
+                    <Grid key={card.title} item xs={3}>
                         <DashboardCard {...card} clickHandler={clickHandler} />
                     </Grid>
                 ))}

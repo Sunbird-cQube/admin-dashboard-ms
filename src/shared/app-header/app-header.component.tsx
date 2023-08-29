@@ -1,7 +1,7 @@
 import { ReactComponent as ReactLogo } from '../../logo.svg';
 import React, { useContext } from 'react';
 import { RoutePath } from '../../routes';
-import { AppBar, Toolbar, Typography, Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, List, ListItem, ListItemButton, ListItemText, Menu, ListSubheader } from '@mui/material';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
@@ -28,6 +28,14 @@ export default function AppHeader(props: any) {
     setMobileOpen((prevState) => !prevState);
   };
   const title = "State Vidya Samiksha Kendra";
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const drawer = (
     <Box className="menu-canvas-container" onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -47,35 +55,100 @@ export default function AppHeader(props: any) {
     </Box>
   );
 
+  const onLogout = () => {
+    setAnchorEl(null);
+    logout();
+  };
+
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <React.Fragment>
       <AppBar component="nav" id='appHeader'>
         <Toolbar>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: 'block', fontSize: '1rem', fontWeight: '700' }}
-          >
-            {title}
-          </Typography>
-          <Box sx={{ display: { xs: 'none', xl: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Box>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1, display: 'block', fontSize: '1rem', fontWeight: '700' }}
+              >
+                {title}
+              </Typography>
+            </Box>
+            <Box sx={{ dispaly: 'flex' }}>
+              <Button
+                color="inherit"
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={open ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+              >
+                <img src="/assets/images/user.png" alt="User Profile" />
               </Button>
-            ))}
-          </Box>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { xl: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                // onClick={handleClose}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: 'visible',
+                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                    mt: 1.5,
+                    '& .MuiAvatar-root': {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    '&:before': {
+                      content: '""',
+                      display: 'block',
+                      position: 'absolute',
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: 'background.paper',
+                      transform: 'translateY(-50%) rotate(45deg)',
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <List
+                  sx={{ width: '100%', minWidth: '250px' }}
+                  component="nav"
+                  aria-labelledby="nested-list-subheader"
+                  subheader={
+                    <ListSubheader component="div" id="nested-list-subheader">
+                      User
+                    </ListSubheader>
+                  }
+                >
+                  <ListItemButton onClick={onLogout}>
+                    <ListItemText primary="Log out" />
+                  </ListItemButton>
+                </List>
+              </Menu>
+            </Box>
+          </div>
         </Toolbar>
       </AppBar>
       <nav>
