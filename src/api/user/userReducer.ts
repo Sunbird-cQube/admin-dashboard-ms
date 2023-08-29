@@ -17,7 +17,7 @@ const initialState: UserState = {
     role: parsedUserDetails ? parsedUserDetails.role : '',
     userId: parsedUserDetails ? parsedUserDetails.userId : '',
     userName: parsedUserDetails ? parsedUserDetails.userName : '',
-    isLoggedIn: true,
+    isLoggedIn: parsedUserDetails ? true : false,
     isError: false,
     isLoading: false,
     loginAttemptFailed: false
@@ -42,9 +42,6 @@ export const userReducer = (state = initialState, action: any) => {
         case actionType.USER_LOGIN_SUCCESS:
             return {
                 ...state,
-                role: action.payload.data.role,
-                userId: action.payload.data.userId,
-                userName: action.payload.data.userName,
                 isLoading: false,
                 isLoggedIn: true,
                 isError: false,

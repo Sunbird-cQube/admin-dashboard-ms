@@ -7,11 +7,12 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
 export interface ExternalActionProps {
-    login: (data: { username: string, password: string, grant_type: string }) => void;
+    login: (data: { username: string, password: string }) => void;
 }
 
 export interface ExternalProps {
@@ -33,9 +34,10 @@ const EmptyError = {
 export function LoginPage(props: ExternalActionProps & ExternalProps) {
     const { loginAttemptFailed, isLoggedIn, login } = props;
     const [error, setError] = useState<any>(EmptyError);
+    const navigate = useNavigate();
 
     if (isLoggedIn) {
-        window.location.href = process.env.REACT_APP_BASE_HREF || '/';
+        window.location.href = '/';
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,7 +69,7 @@ export function LoginPage(props: ExternalActionProps & ExternalProps) {
         setError(errorNew);
 
         if (!isInvalid) {
-            login({ username: userName as string, password: password as string, grant_type: 'password'});
+            login({ username: userName as string, password: password as string });
         }
     };
 

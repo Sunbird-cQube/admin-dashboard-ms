@@ -1,9 +1,8 @@
 import * as actionTypes from "./userActionTypes";
 import axios from 'axios';
 import store from '../../store';
-import FormData from "form-data";
 
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.REACT_APP_API_URL;
 const userId = store.getState().userPage.userId;
 
 export const userLoginInit = () => ({
@@ -31,7 +30,7 @@ export const userLogoutSuccess = () => ({
     type: actionTypes.USER_LOGOUT_SUCCESS
 });
 
-export const login = (data: { username: string, password: string, grant_type: string }) => {
+export const login = (data: { username: string, password: string }) => {
     const payload = {
         username: data.username,
         password: data.password
@@ -39,12 +38,10 @@ export const login = (data: { username: string, password: string, grant_type: st
 
     return (dispatch: any) => {
         dispatch(userLoginInit());
-        axios.post(`${apiUrl}/login`, payload)
+        axios.post(`${apiUrl}/admin/login`, payload)
             .then((response) => {
-                console.log("Response: ", response);
-                //dispatch(getUserDetail(response.data.access_token));
-                // localStorage.setItem('app-user-details', JSON.stringify(response.data.data));
-                // dispatch(userLoginSuccess(response.data.data));
+                localStorage.setItem('app-user-details', JSON.stringify(response.data));
+                dispatch(userLoginSuccess(response.data));
             })
             .catch(function (error) {
                 dispatch(userLoginFailure());
@@ -53,20 +50,21 @@ export const login = (data: { username: string, password: string, grant_type: st
 };
 
 export const logout = () => {
-    const header = { headers: { user: userId, Authorization: `Bearer ${localStorage.getItem("token")}` } };
+    const userDetails = JSON.parse(localStorage.getItem('app-user-details') as string);
+    const header = { headers: { user: userId, Authorization: `Bearer ${userDetails.access_token}` } };
 
     return (dispatch: any) => {
         dispatch(userLoginInit());
-        localStorage.removeItem('token');
-        localStorage.removeItem('app-user-details');
-        axios.post(`${apiUrl}/user-logout`, {}, header)
+        
+        axios.post(`${apiUrl}/logout`, { refresh_token: userDetails.refresh_token }, header)
             .then((response: any) => {
-                // window.location.href = "/bosch-aic/#/login";
-                // window.location.href = process.env.REACT_APP_MAIN_DOMAIN_URL || '/';
+                localStorage.removeItem('app-user-details');
                 window.location.href = '/login';
                 dispatch(userLogoutSuccess());
             })
             .catch(function (error) {
+                localStorage.removeItem('app-user-details');
+                window.location.href = '/login';
                 dispatch(userLogoutFailure());
             });
     };
