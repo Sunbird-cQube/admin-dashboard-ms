@@ -2,6 +2,7 @@ import { useState } from "react";
 import papa from "papaparse";
 import swal from "sweetalert";
 import { IoMdArrowBack } from "react-icons/io";
+import { BsUpload } from "react-icons/bs"
 
 const HomePage = () => {
   const [selectedOption, setSelectedOption] = useState("event grammar");
@@ -163,9 +164,10 @@ const HomePage = () => {
                 />
                 <label
                   htmlFor="file-input"
-                  className="px-2 cursor-pointer select-none inline-flex items-center"
+                  className="px-2 cursor-pointer select-none inline-flex items-center font-demi"
                 >
-                  Upload File
+                  <BsUpload size='1rem' />
+                  &nbsp;&nbsp;Upload File
                 </label>
               </div>
             </div>

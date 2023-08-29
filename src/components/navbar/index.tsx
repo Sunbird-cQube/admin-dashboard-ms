@@ -10,7 +10,7 @@ import router from "next/router";
 function Navbar() {
   return (
     <div className="w-full h-fit bg-white absolute top-0 text-center text-indigo-900 font-bold text-md sm:text-2xl py-3 flex z-[10]">
-      <div className="drawer m-2 text-left w-fit">
+      <div className="drawer m-2 pl-2 text-left w-fit">
         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           <label htmlFor="my-drawer" className="drawer-button cursor-pointer">
@@ -42,7 +42,7 @@ function Navbar() {
         </div>
       </div>
       <p className="text-center m-auto w-full">State Vidya Samiksha Kendra</p>
-      <div className='cursor-pointer p-2'><Image src={ProfileIcon} alt='ProfileIcon' /></div>
+      <div className='cursor-pointer pr-4 flex self-center'><Image src={ProfileIcon} alt='ProfileIcon' /></div>
     </div>
   );
 }
