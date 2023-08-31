@@ -6,6 +6,7 @@ import DashboardIcon from "@/assets/images/dashbaordIcon.png";
 import SchemaIcon from "@/assets/images/schemaIcon.png";
 import ProfileIcon from "@/assets/images/profileIcon.png";
 import router from "next/router";
+import { userService } from '../../services';
 
 function Navbar() {
   return (
@@ -45,7 +46,7 @@ function Navbar() {
         <p className="text-center">Vidya Samiksha Kendra</p>
       </div>
       <div className='cursor-pointer pr-4 flex self-center'>
-        <Image src={ProfileIcon} alt='ProfileIcon' />
+        <Image src={ProfileIcon} alt='ProfileIcon' onClick={() => userService.logout()} />
       </div>
     </div>
   );
