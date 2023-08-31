@@ -1,84 +1,35 @@
-import { useState } from "react";
-import papa from "papaparse";
-import swal from "sweetalert";
-import { IoMdArrowBack } from "react-icons/io";
-import { BsUpload } from "react-icons/bs"
 import DashboardCard from "@/components/dashboard-card";
 
 const DashboardPage = () => {
-  const [selectedOption, setSelectedOption] = useState("event grammar");
-  const [showTable, setShowTable] = useState(false);
-  const [tabledata, setTabledata] = useState([]);
-  const [errordata, setErrordata] = useState([]);
+  const cards = [
+    {
+        title: 'System monitoring',
+        imageUrl: 'assets/images/performance.png',
+        link: process.env.NEXT_PUBLIC_GRAFANA_URL
+    },
+    {
+        title: 'Data debugger',
+        imageUrl: 'assets/images/debugger.png',
+        link: '/admin/debugger'
+    },
+    {
+        title: 'Schema generator',
+        imageUrl: 'assets/images/schema_creation.png',
+        link: '/admin/debugger'
+    },
+  ];
 
-  const handleOptionChange = (option: any) => {
-    setSelectedOption(option);
-  };
-
-  const uploadHandler = async (file: File) => {
-    if (file) {
-      const formData = new FormData();
-      formData.append("grammar", file, file.name);
-      formData.append(
-        "type",
-        selectedOption.toLowerCase().split(" ").join("-")
-      );
-
-      papa.parse(file, {
-        complete: function (results, file) {
-          //@ts-ignore
-          setTabledata(results?.data);
-        },
-      });
-
-      try {
-        const response = await fetch(
-          "https://cqube-admin.onrender.com/admin/validate",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log(responseData);
-          setErrordata(responseData.errors);
-          swal("", "File uploaded successfully", "success");
-        } else {
-          console.log("Error uploading file");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      swal("", "No File Selected", "warn");
-    }
-  };
-
-  const handleDebug = () => {
-    let modifiedData = tabledata;
-
-    errordata &&
-      errordata?.length > 0 &&
-      errordata?.map((data: any) => {
-        const value = modifiedData?.[data?.row][data?.col];
-        // @ts-ignore
-        if (!value?.error) {
-          // @ts-ignore
-          modifiedData[data?.row][data?.col] = {
-            error: data.error,
-            value,
-          };
-        }
-        console.log(value);
-      });
-    setShowTable(true);
-  };
+  const clickHandler = (data: any) => {
+    window.open(data.link)
+  }
 
   return (
-    <div className="flex items-center justfy-center h-full text-black">
-      <DashboardCard />
+    <div className="grid grid-cols-12 gap-10">
+        {cards.map(card => (
+          <div key={card.title} className="col-span-3">
+            <DashboardCard {...card} clickHandler={clickHandler}></DashboardCard>
+          </div>
+        ))}
     </div>
   );
 };

@@ -1,10 +1,9 @@
-export default function DashboardCard() {
+export default function DashboardCard(props: any) {
+  const { title, imageUrl, clickHandler } = props;
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4">
-        <img src="image-url.jpg" alt="Card Image" className="w-full h-32 object-cover mb-4 rounded-md" />
-        <h3 className="text-xl font-semibold mb-2">Card Title</h3>
-        <p className="text-gray-600">This is a simple card element designed using Tailwind CSS.</p>
-        <a href="#" className="text-blue-500 mt-2 inline-block hover:underline">Read more</a>
+    <div className="bg-white shadow-lg rounded-lg px-5 py-5 flex flex-col items-center justify-between cursor-pointer h-60" onClick={() => clickHandler(props)}>
+        <img src={imageUrl} alt={title} className="w-6/12 mb-4 rounded-md" />
+        <h6 className="font-semibold mb-2 text-indigo-900">{title}</h6>
     </div>
   );
 }
