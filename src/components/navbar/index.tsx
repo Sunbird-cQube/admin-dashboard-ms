@@ -7,6 +7,7 @@ import SchemaIcon from "@/assets/images/schemaIcon.png";
 import ProfileIcon from "@/assets/images/profileIcon.png";
 import router from "next/router";
 import { userService } from '../../services';
+import Link from "next/link";
 
 function Navbar() {
   return (
@@ -22,22 +23,22 @@ function Navbar() {
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 min-h-full bg-white text-black text-lg font-demi">
             <li>
-              <a>
+              <Link href="/dashboard">
                 <Image src={DashboardIcon} alt="DashboardIcon" />
                 Dashboard
-              </a>
+              </Link>
             </li>
             <li>
-              <a>
+              <Link href="/debugger">
                 <Image src={DebuggerIcon} alt="DebuggerIcon" />
                 Data Debugger
-              </a>
+              </Link>
             </li>
             <li>
-              <a>
+              <Link href="/debugger">
                 <Image src={SchemaIcon} alt="SchemaIcon" />
                 Schema Creation
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
