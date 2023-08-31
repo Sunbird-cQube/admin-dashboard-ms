@@ -1,26 +1,34 @@
 import DashboardCard from "@/components/dashboard-card";
+import { useRouter } from "next/router";
 
 const DashboardPage = () => {
+  const router = useRouter();
+
   const cards = [
     {
         title: 'System monitoring',
         imageUrl: 'assets/images/performance.png',
-        link: process.env.NEXT_PUBLIC_GRAFANA_URL
+        link: process.env.NEXT_PUBLIC_GRAFANA_URL,
+        openInNewtab: true
     },
     {
         title: 'Data debugger',
         imageUrl: 'assets/images/debugger.png',
-        link: '/admin/debugger'
+        link: '/debugger'
     },
     {
         title: 'Schema generator',
         imageUrl: 'assets/images/schema_creation.png',
-        link: '/admin/debugger'
+        link: '/debugger'
     },
   ];
 
   const clickHandler = (data: any) => {
-    window.open(data.link)
+    if (data.openInNewtab) {
+      window.open(data.link)
+    } else {
+      router.push(data.link);
+    }
   }
 
   return (
