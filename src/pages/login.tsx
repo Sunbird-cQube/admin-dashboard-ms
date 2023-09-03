@@ -6,9 +6,7 @@ import * as Yup from "yup";
 
 import { userService } from "../services";
 
-export default Login;
-
-function Login() {
+export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -53,6 +51,11 @@ function Login() {
         <h1 className="text-[#333175] font-bold  text-[24px] lg:text-[30px]  text-center px-4 mb-8">State Vidya Samiksha Kendra</h1>
       <div className="bg-white lg:w-[40vw] lg:p-12 shadow-xl rounded-lg">
         <div className="card-body">
+          {invalidCred && (
+            <div className="alert alert-danger bg-rose-300 mt-3 mb-0">
+              Invalid credentials
+            </div>
+          )}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <label className="text-[#3A3846] font-medium text-[17px]">
@@ -97,12 +100,6 @@ function Login() {
                 Login
               </button>
             </div>
-
-            {invalidCred && (
-              <div className="alert alert-danger mt-3 mb-0">
-                Invalid credentials
-              </div>
-            )}
           </form>
         </div>
       </div>
