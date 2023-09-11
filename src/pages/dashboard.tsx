@@ -33,9 +33,9 @@ const DashboardPage = () => {
 
   return (
     <div className="grid grid-cols-12 gap-10">
-        {cards.map(card => (
+        {cards.map((card, ind) => (
           <div key={card.title} className="col-span-3">
-            <DashboardCard {...card} clickHandler={clickHandler}></DashboardCard>
+            <DashboardCard id={`dashboardCard${ind}`} {...card} clickHandler={clickHandler}></DashboardCard>
           </div>
         ))}
     </div>

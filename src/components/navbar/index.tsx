@@ -23,19 +23,19 @@ function Navbar() {
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 min-h-full bg-white text-black text-lg font-demi">
             <li>
-              <Link href="/dashboard">
+              <Link id="dashboardLink" href="/dashboard">
                 <Image src={DashboardIcon} alt="DashboardIcon" />
                 Dashboard
               </Link>
             </li>
             <li>
-              <Link href="/debugger">
+              <Link id="debuggerLink" href="/debugger">
                 <Image src={DebuggerIcon} alt="DebuggerIcon" />
                 Data Debugger
               </Link>
             </li>
             <li>
-              <Link href="/debugger">
+              <Link id="schemaLink" href="/debugger">
                 <Image src={SchemaIcon} alt="SchemaIcon" />
                 Schema Creation
               </Link>
