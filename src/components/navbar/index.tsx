@@ -15,7 +15,7 @@ function Navbar() {
       <div className="drawer text-left w-fit">
         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
-          <label htmlFor="my-drawer" className="drawer-button cursor-pointer">
+          <label htmlFor="my-drawer" id="menuToggler" className="drawer-button cursor-pointer">
             <FaGripLines size="2rem" />
           </label>
         </div>
@@ -23,19 +23,20 @@ function Navbar() {
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 min-h-full bg-white text-black text-lg font-demi">
             <li>
-              <Link href="/dashboard">
+              <Link id="dashboardLink" href="/dashboard">
                 <Image src={DashboardIcon} alt="DashboardIcon" />
                 Dashboard
               </Link>
             </li>
             <li>
-              <Link href="/debugger">
+              <Link id="debuggerLink" href="/debugger">
                 <Image src={DebuggerIcon} alt="DebuggerIcon" />
                 Data Debugger
               </Link>
             </li>
             <li>
               <Link href="/schemaCreation">
+
                 <Image src={SchemaIcon} alt="SchemaIcon" />
                 Schema Creation
               </Link>
@@ -47,7 +48,7 @@ function Navbar() {
         <p className="text-center">Vidya Samiksha Kendra</p>
       </div>
       <div className='cursor-pointer pr-4 flex self-center'>
-        <Image src={ProfileIcon} alt='ProfileIcon' onClick={() => userService.logout()} />
+        <Image className="userProfileDropdown" src={ProfileIcon} alt='ProfileIcon' onClick={() => userService.logout()} />
       </div>
     </div>
   );
