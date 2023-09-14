@@ -10,6 +10,7 @@ import Loader from "@/components/fullscreenLoader";
 
 const SchemaCreationPage = () => {
   const [token, setToken] = useState(uuidv4());
+  //const [token, setToken] = useState('4bbaabb5-745e-4b93-81f7-ed135c236292');
   const [showTable, setShowTable] = useState(false);
   const [tabledata, setTabledata] = useState([]);
   const [ingestFileResult, setIngestFileResult] = useState(null);
@@ -36,10 +37,10 @@ const SchemaCreationPage = () => {
   };
 
   const onUpdate = useCallback(
-    (newRecords: any) => {
+    (newRecords: any,programInfo:any) => {
       setLoading(true);
       userService
-        .generateIngestFiles(token, newRecords)
+        .generateIngestFiles(token, newRecords,programInfo)
         .then((res) => {
           setLoading(false);
           swal("", "File Ingested successfully", "success");

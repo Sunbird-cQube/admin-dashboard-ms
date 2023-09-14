@@ -13,9 +13,9 @@ const UpdateFileRecords: FC<any> = ({ data, name, token }) => {
     (ev: any) => {
       setLoading(true);
       setFilename(ev.target.value);
-      if (name === "Dimensions") {
+      // if (name === "Dimensions") {
         userService
-          .getDimensionFileContent(token, ev.target.value)
+          .getFileContent(token, ev.target.value)
           .then((res) => {
             setLoading(false);
             setFileContent(JSON.parse(res.data.content));
@@ -23,9 +23,9 @@ const UpdateFileRecords: FC<any> = ({ data, name, token }) => {
             console.log({err})
             setLoading(false);
           });
-      }
+     // }
     },
-    [name, token]
+    [token]
   );
 
   return (
@@ -33,7 +33,7 @@ const UpdateFileRecords: FC<any> = ({ data, name, token }) => {
         <Loader loading={loading} />
       <h3>{name}</h3>
       <div>
-        Select File
+        Select File 
         <select
           className="bg-white border px-2 py-1 w-full"
           value={filename}
