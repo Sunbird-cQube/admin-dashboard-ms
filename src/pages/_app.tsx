@@ -29,12 +29,13 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   function authCheck(url: string) {
-    if (!userService.userValue) {
-        setAuthorized(false);
-        router.push('/login');
-    } else {
-        setAuthorized(true);
-    }
+    setAuthorized(true);
+    // if (!userService.userValue) {
+    //     setAuthorized(false);
+    //     router.push('/login');
+    // } else {
+    //     setAuthorized(true);
+    // }
   }
 
   function getHeader() {

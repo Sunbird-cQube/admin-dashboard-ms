@@ -14,7 +14,7 @@ export default function LoginPage() {
     if (userService.userValue) {
       router.push("/dashboard");
     }
-  }, []);
+  }, [router]);
 
   // form validation rules
   const validationSchema = Yup.object().shape({

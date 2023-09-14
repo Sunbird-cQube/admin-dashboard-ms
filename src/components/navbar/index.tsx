@@ -35,7 +35,7 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <Link href="/debugger">
+              <Link href="/schemaCreation">
                 <Image src={SchemaIcon} alt="SchemaIcon" />
                 Schema Creation
               </Link>

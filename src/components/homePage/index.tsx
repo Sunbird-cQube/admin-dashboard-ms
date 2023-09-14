@@ -41,7 +41,6 @@ const HomePage = () => {
 
         if (response.ok) {
           const responseData = await response.json();
-          console.log(responseData);
           setErrordata(responseData.errors);
           swal("", "File uploaded successfully", "success");
         } else {
@@ -70,7 +69,6 @@ const HomePage = () => {
             value,
           };
         }
-        console.log(value);
       });
     setShowTable(true);
   };
