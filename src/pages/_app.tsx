@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { userService } from '../services';
+import { UnProtectedRoutes } from '@/constants/UnProtectedRoutes';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   function authCheck(url: string) {
+
     setAuthorized(true);
     // if (!userService.userValue) {
     //     setAuthorized(false);
@@ -36,6 +38,18 @@ export default function App({ Component, pageProps }: AppProps) {
     // } else {
     //     setAuthorized(true);
     // }
+
+    if (UnProtectedRoutes.indexOf(url) > -1) {
+      setAuthorized(false);
+      return;
+    }
+
+    if (!userService.userValue) {
+      setAuthorized(false);
+      router.push('/login');
+    } else {
+      setAuthorized(true);
+    }
   }
 
   function getHeader() {
@@ -55,12 +69,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </Layout>
     )
-  } else if(Component.name === "LoginPage") {
-    return (
-      <>
-        {getHeader()}
-        <Component {...pageProps} />
-      </>
-    );
   }
+
+  return (
+    <>
+      {getHeader()}
+      <Component {...pageProps} />
+    </>
+  );
 }

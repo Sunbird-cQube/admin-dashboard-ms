@@ -62,6 +62,7 @@ export default function LoginPage() {
                 Username
               </label>
               <input
+                id="userName"
                 type="text"
                 {...register("username")}
                 className={`form-control appearance-none border rounded w-full py-2 px-3 mt-1 bg-white text-[#3A3846] ${
@@ -78,6 +79,7 @@ export default function LoginPage() {
                 Password
               </label>
               <input
+                id="password"
                 type="password"
                 {...register("password")}
                 className={`form-control appearance-none border rounded w-full py-2 px-3 mt-1 bg-white text-[#3A3846] ${
@@ -91,6 +93,7 @@ export default function LoginPage() {
             </div>
             <div className="flex justify-center">
               <button
+                id="loginBtn"
                 disabled={formState.isSubmitting}
                 className="btn mt-8 px-8 bg-[#202342] text-white text-[17px] font-medium capitalize"
               >
