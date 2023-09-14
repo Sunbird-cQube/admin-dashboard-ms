@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-image: url("../assets/images/background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  max-width: 100vw;
+}
+
+@font-face {
+  font-family: Mulish-bold;
+  src: url("../assets/fonts/en/Mulish-Bold.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: Mulish-demi;
+  src: url("../assets/fonts/en/Mulish-Demi.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: Mulish-medium;
+  src: url("../assets/fonts/en/Mulish-Medium.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: Mulish-regular;
+  src: url("../assets/fonts/en/Mulish-Regular.ttf");
+  font-display: swap;
+}
+
+.font-bold {
+  font-family: Mulish-bold !important;
+}
+.font-demi {
+  font-family: Mulish-demi !important;
+}
+.font-medium {
+  font-family: Mulish-medium !important;
+}
+.font-regular {
+  font-family: Mulish-regular !important;
+}
+
+body{
+  font-family: Mulish-regular;
+}
