@@ -2,7 +2,7 @@ import Layout from '@/components/layout'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { userService } from '../services';
 
@@ -10,6 +10,15 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
 
+  const authCheck=useCallback((url: string) =>{
+    setAuthorized(true);
+    // if (!userService.userValue) {
+    //     setAuthorized(false);
+    //     router.push('/login');
+    // } else {
+    //     setAuthorized(true);
+    // }
+  },[])
   useEffect(() => {
     // run auth check on initial load
     authCheck(router.asPath);
@@ -26,17 +35,9 @@ export default function App({ Component, pageProps }: AppProps) {
         router.events.off('routeChangeStart', hideContent);
         router.events.off('routeChangeComplete', authCheck);
     }
-  }, []);
+  }, [router.asPath, router.events,authCheck]);
 
-  function authCheck(url: string) {
-    setAuthorized(true);
-    // if (!userService.userValue) {
-    //     setAuthorized(false);
-    //     router.push('/login');
-    // } else {
-    //     setAuthorized(true);
-    // }
-  }
+ 
 
   function getHeader() {
     return (
