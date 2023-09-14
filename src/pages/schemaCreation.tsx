@@ -47,8 +47,9 @@ const SchemaCreationPage = () => {
           setIngestFileResult(res.data);
         })
         .catch((err) => {
+          console.log({err})
           setLoading(false);
-          swal("", `${err.message}`, "error");
+          swal("", `${err.response?.data?.detail?.[0]?.msg || err.message}`, "error");
         });
     },
     [token]
