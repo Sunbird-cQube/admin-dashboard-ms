@@ -78,7 +78,7 @@ const downloadIngestFiles = (token: string) => {
 
 export const debugSchema = (data: any) => {
   return axios.post(
-    `${process.env.NEXT_PUBLIC_DEBUGGER_API}/admin/validate`,
+    `${process.env.NEXT_PUBLIC_DEBUGGER_API}/validate`,
     data
   );
 };
