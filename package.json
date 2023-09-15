@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "dotenv -c -- next start",
+    "build": "next build",
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.1",
+    "@types/lodash": "^4.14.198",
     "@types/node": "20.5.7",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -18,21 +20,29 @@
     "dotenv-cli": "^7.3.0",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "json-to-table": "^4.2.1",
+    "lodash": "^4.17.21",
     "next": "13.4.19",
     "papaparse": "^5.4.1",
     "postcss": "8.4.28",
     "react": "18.2.0",
+    "react-data-table-component": "^7.5.4",
     "react-dom": "18.2.0",
+    "react-form-stepper": "^2.0.3",
     "react-hook-form": "^7.45.4",
     "react-icons": "^4.10.1",
+    "react-paginate": "^8.2.0",
     "rxjs": "^7.8.1",
+    "styled-components": "^6.0.8",
     "sweetalert": "^2.1.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
+    "uuid": "^9.0.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/papaparse": "^5.3.8",
+    "@types/uuid": "^9.0.3",
     "daisyui": "^3.6.3"
   }
 }

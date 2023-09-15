@@ -1,83 +1,170 @@
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import papa from "papaparse";
 import swal from "sweetalert";
-import { IoMdArrowBack } from "react-icons/io";
-import { BsUpload } from "react-icons/bs"
+import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
+import { BsUpload } from "react-icons/bs";
+import { userService } from "@/services";
+import Table from "@/components/table";
+import dynamic from "next/dynamic";
+import { filter, map, uniq } from "lodash";
+import Loader from "@/components/fullscreenLoader";
+import DataTableComp from "@/components/data-table";
+import { read } from "fs";
+
+const StepperComponent = dynamic(() => import("@/components/stepper"), {
+  ssr: false,
+});
 
 const DebuggerPage = () => {
-  const [selectedOption, setSelectedOption] = useState("event grammar");
+  const [activeStep, setActiveStep] = useState(1);
   const [showTable, setShowTable] = useState(false);
-  const [tabledata, setTabledata] = useState([]);
-  const [errordata, setErrordata] = useState([]);
+  const [grammarData, setGrammarData] = useState([]);
+  const [errordata, setErrordata] = useState<any>(null);
+  const [grammarFile, setGrammarFile] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [temp, setTemp] = useState();
+  const [schemaData, setSchemaData] = useState([
+    { id: 1, name: "Dimension Grammar", value: "dimension-grammar", step: 1 },
+    { id: 2, name: "Dimension Data", value: "dimension-data", step: 2 },
+    { id: 3, name: "Event Grammar", value: "event-grammar", step: 1 },
+    { id: 4, name: "Event Data", value: "event-data", step: 2 },
+  ]);
+  const [selectedSchema, setSelectedSchema] = useState("dimension-grammar");
 
-  const handleOptionChange = (option: any) => {
-    setSelectedOption(option);
-  };
+  const handleSchemaChange = useCallback((ev: any) => {
+    setSelectedSchema(ev.target.value);
+  }, []);
 
-  const uploadHandler = async (file: File) => {
-    if (file) {
-      const formData = new FormData();
-      formData.append("grammar", file, file.name);
-      formData.append(
-        "type",
-        selectedOption.toLowerCase().split(" ").join("-")
-      );
+  const uploadHandler = useCallback(
+    (file: File) => {
+      setIsLoading(true);
+      if (file) {
+        const formData = new FormData();
+        if (activeStep === 1) {
+          setGrammarFile(file);
 
-      papa.parse(file, {
-        complete: function (results, file) {
-          //@ts-ignore
-          setTabledata(results?.data);
-        },
-      });
-
-      try {
-        const response = await fetch(
-          "https://cqube-admin.onrender.com/admin/validate",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log(responseData);
-          setErrordata(responseData.errors);
-          swal("", "File uploaded successfully", "success");
+          formData.append("grammar", file, file.name);
+          formData.append("type", selectedSchema);
         } else {
-          console.log("Error uploading file");
+          formData.append("grammar", grammarFile, grammarFile.name);
+          formData.append("data", file, file.name);
+          formData.append("type", selectedSchema);
         }
-      } catch (error) {
-        console.error(error);
+
+        papa.parse(file, {
+          complete: function (results, file) {
+            //@ts-ignore
+            setGrammarData(results?.data);
+          },
+        });
+
+        // const reader = new FileReader();
+
+        // reader.onload = function (e) {
+        //   //@ts-ignore
+        //   const text = e.target.result;
+        //   //@ts-ignore
+        //   setTemp(text);
+        // };
+
+        // reader.readAsText(file);
+    
+     
+
+        userService
+          .debugSchema(formData)
+          .then((response) => {
+            setIsLoading(false);
+            setErrordata(response.data.errors);
+            swal("", "File uploaded successfully", "success");
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            swal("", `${err.message}`, "error");
+          });
+      } else {
+        swal("", "No File Selected", "warn");
       }
+    },
+
+    [activeStep, grammarFile, selectedSchema]
+  );
+
+  const handleDebug = () => {
+    let modifiedData = [...grammarData];
+    if (errordata?.length === 0) {
+      swal("", "It's a valid schema", "success");
+      goTo(2)();
+      return;
     } else {
-      swal("", "No File Selected", "warn");
+      const errorRows = uniq(map(errordata, (ed: any) => ed.row));
+      errordata &&
+        errordata?.length > 0 &&
+        errordata?.map((data: any) => {
+          const value = modifiedData?.[data?.row][data?.col];
+          // @ts-ignore
+          if (!value?.error) {
+            // @ts-ignore
+            modifiedData[data?.row][data?.col] = {
+              //@ts-ignore
+              error: data.error,
+              value,
+            };
+          }
+         
+        });
+
+      setGrammarData(modifiedData);
+
+      setShowTable(true);
     }
   };
 
-  const handleDebug = () => {
-    let modifiedData = tabledata;
+  const steps = useMemo(
+    () => [
+      {
+        id: 1,
+        label: "Validate Grammar",
+      },
+      {
+        id: 2,
+        label: "Validate Data",
+      },
+    ],
+    []
+  );
 
-    errordata &&
-      errordata?.length > 0 &&
-      errordata?.map((data: any) => {
-        const value = modifiedData?.[data?.row][data?.col];
-        // @ts-ignore
-        if (!value?.error) {
-          // @ts-ignore
-          modifiedData[data?.row][data?.col] = {
-            error: data.error,
-            value,
-          };
-        }
-        console.log(value);
-      });
-    setShowTable(true);
-  };
+  const goTo = useCallback(
+    (step: number) => () => {
+      {
+        setActiveStep(step);
+        setGrammarData([]);
+        setShowTable(false);
+        setErrordata([]);
+        setSelectedSchema("dimension-data");
+      }
+    },
+    []
+  );
 
+  const selectOptions = useMemo(
+    () => filter(schemaData, { step: activeStep }),
+    [activeStep, schemaData]
+  );
+
+  const showStepper = useMemo(
+    () => errordata && errordata.length === 0,
+    [errordata]
+  );
   return (
     <div className="flex items-center justfy-center h-full text-black">
-      <div className="bg-white h-[60vh] sm:h-[80vh] w-[80vw] m-auto rounded-lg p-6">
+      <div
+        className="bg-white  w-full m-auto rounded-lg p-2"
+        style={{ minHeight: "80vh" }}
+      >
+        <Loader loading={isLoading} />
+        <StepperComponent steps={steps} activeStep={activeStep} />
+
         {showTable ? (
           <IoMdArrowBack
             size="2rem"
@@ -89,68 +176,25 @@ const DebuggerPage = () => {
         )}
         {!showTable ? (
           <>
-            <p className="pb-2">Select type of data to be debugged</p>
-            <div className="pb-4 flex sm:flex-row flex-col">
-              <div className="mr-6">
-                <input
-                  type="radio"
-                  name="option"
-                  id="dimension"
-                  className="hidden"
-                  checked={selectedOption === "dimension"}
-                  onChange={() => handleOptionChange("dimension")}
-                />
-                <label
-                  htmlFor="dimension"
-                  className="px-2 cursor-pointer select-none inline-flex items-center"
-                >
-                  <span
-                    className={`w-4 h-4 inline-block mr-1 rounded-full transition-all duration-300 ${
-                      selectedOption === "dimension"
-                        ? "bg-blue-500"
-                        : "bg-gray-300"
-                    }`}
-                  ></span>
-                  Dimension
-                </label>
-              </div>
-              <div className="sm:ml-6">
-                <input
-                  type="radio"
-                  name="option"
-                  id="event grammar"
-                  className="hidden"
-                  checked={selectedOption === "event grammar"}
-                  onChange={() => handleOptionChange("event grammar")}
-                />
-                <label
-                  htmlFor="event grammar"
-                  className="px-2 cursor-pointer select-none inline-flex items-center"
-                >
-                  <span
-                    className={`w-4 h-4 inline-block mr-1 rounded-full transition-all duration-300 ${
-                      selectedOption === "event grammar"
-                        ? "bg-blue-500"
-                        : "bg-gray-300"
-                    }`}
-                  ></span>
-                  Event
-                </label>
-              </div>
-            </div>
-
             <div className="flex items-center sm:flex-row flex-col justify-center sm:justify-start text-center sm:text-left m-auto">
               <div className="mt-4">
-                <label htmlFor="schema">Select Dimension / Event schema</label>
+                <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                  {activeStep === 1 ? "Grammar Validation" : "Data Validation"}
+                </h2>
+
+                <label htmlFor="schema">Select Grammar / Data</label>
                 <br></br>
                 <select
                   name="schema"
+                  value={selectedSchema}
                   className="my-2 bg-white border-solid border-2 border-black rounded-md p-2 w-full"
+                  onChange={handleSchemaChange}
                 >
-                  <option value="state">State Schema</option>
-                  <option value="district">District Schema</option>
-                  <option value="city">City Schema</option>
-                  <option value="block">Block Schema</option>
+                  {selectOptions?.map((record) => (
+                    <option value={record.value} key={record.id}>
+                      {record?.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="sm:ml-12 p-2 border-2 border-solid border-indigo-900 text-indigo-900 rounded-lg cursor-pointer mt-auto mb-2">
@@ -166,8 +210,8 @@ const DebuggerPage = () => {
                   htmlFor="file-input"
                   className="px-2 cursor-pointer select-none inline-flex items-center font-demi"
                 >
-                  <BsUpload size='1rem' />
-                  &nbsp;&nbsp;Upload File
+                  <BsUpload size="1rem" />
+                  &nbsp;&nbsp;{isLoading ? "Uploading..." : "Upload File"}
                 </label>
               </div>
             </div>
@@ -175,63 +219,35 @@ const DebuggerPage = () => {
               <button
                 className="py-2 px-4 bg-indigo-900 text-white rounded-lg mt-4 cursor-pointer disabled:opacity-50"
                 onClick={handleDebug}
-                disabled={tabledata?.length === 0}
+                disabled={grammarData?.length === 0 || isLoading}
               >
-                Start Debugging
+                Debug {activeStep === 1 ? "Grammar" : "Data"}
               </button>
             </div>
           </>
         ) : (
           <div className="overflow-auto sm:rounded-lg w-[100%] max-h-[85%]">
-            <table className="w-full text-sm text-left text-black mt-4">
-              <thead className="text-xs text-black uppercase bg-gray-50">
-                {tabledata?.map(
-                  (data: any, index: any) =>
-                    index == 0 && (
-                      <tr
-                        className="bg-gray-100 border-2 border-dashed border-[#e1edff]"
-                        key={index}
-                      >
-                        {data?.map((row: any, ind: any) => (
-                          <th
-                            className={`px-6 py-4 text-center ${
-                              row?.error && "bg-red-200 cursor-pointer"
-                            }`}
-                            key={ind}
-                            title={row?.error ? row?.error : ""}
-                          >
-                            {row?.error ? row?.value : row}
-                          </th>
-                        ))}
-                      </tr>
-                    )
-                )}
-              </thead>
-              <tbody>
-                {tabledata?.map(
-                  (data: any, row: any) =>
-                    row > 0 && (
-                      <tr className="bg-white border-b" key={row}>
-                        {data?.map((columnData: any, column: any) => (
-                          <>
-                            <td
-                              className={`px-6 py-4 text-center ${
-                                columnData?.error && "bg-red-200 cursor-pointer"
-                              } font-regular`}
-                              key={column}
-                              title={columnData?.error ? columnData?.error : ""}
-                            >
-                              {columnData?.error
-                                ? columnData?.value
-                                : columnData}
-                            </td>
-                          </>
-                        ))}
-                      </tr>
-                    )
-                )}
-              </tbody>
-            </table>
+            <Table tabledata={grammarData} showEdit={false} />
+            {/* <DataTableComp tabledata={grammarData} showEdit={false} temp={temp}/> */}
+          </div>
+        )}
+        {showStepper && (
+          <div>
+            <button
+              className="btn btn-primary btn-sm mt-3 mx-auto"
+              disabled={activeStep === 1}
+              onClick={goTo(1)}
+            >
+              <IoMdArrowBack />
+              Back
+            </button>
+            <button
+              className="btn btn-primary btn-sm mt-3 ml-3"
+              disabled={activeStep === 2}
+              onClick={goTo(2)}
+            >
+              Validate Data <IoMdArrowForward />
+            </button>
           </div>
         )}
       </div>
