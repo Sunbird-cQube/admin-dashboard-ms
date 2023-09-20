@@ -5,7 +5,6 @@ import Head from 'next/head';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { userService } from '../services';
-import { UnProtectedRoutes } from '@/constants/UnProtectedRoutes';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
