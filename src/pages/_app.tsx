@@ -12,13 +12,13 @@ export default function App({ Component, pageProps }: AppProps) {
   const [authorized, setAuthorized] = useState(false);
 
   const authCheck=useCallback((url: string) =>{
-    setAuthorized(true);
-    // if (!userService.userValue) {
-    //     setAuthorized(false);
-    //     router.push('/login');
-    // } else {
-    //     setAuthorized(true);
-    // }
+    //setAuthorized(true);
+    if (!userService.userValue) {
+        setAuthorized(false);
+        router.push('/login');
+    } else {
+        setAuthorized(true);
+    }
   },[])
   useEffect(() => {
     // run auth check on initial load
