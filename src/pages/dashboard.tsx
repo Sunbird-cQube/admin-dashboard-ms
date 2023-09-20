@@ -22,7 +22,7 @@ const DashboardPage = () => {
       id: 'schemaGeneratorCard',
       title: 'Schema generator',
       imageUrl: 'assets/images/schema_creation.png',
-      link: '/debugger'
+      link: '/schemaCreation'
     },
   ];
 
