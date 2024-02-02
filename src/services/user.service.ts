@@ -38,12 +38,12 @@ const generateIngestFiles = async (
   records: any,
   programInfo: any
 ) => {
-  console.log({programInfo})
   return axios.post(
     `${process.env.NEXT_PUBLIC_CSV_PARSER_API}/api/generate-ingest-files/?token=${token}`,
     {
       program_name: programInfo.programName,
       program_desc: programInfo.programDesc,
+      dimensions: programInfo.dimensions,
       column_metadata: records,
     }
   );
