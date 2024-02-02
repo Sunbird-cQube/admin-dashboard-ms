@@ -33,29 +33,34 @@ const MetricDimensionRecords: FC<any> = ({ data, token,goBack }) => {
     <div>
       <Breadcrumbs setActiveTab={setActiveTab} token={token} goBack={goBack}/>
       {activeTab === "list" && (
-        <div className="flex">
-          <ul role="list" className="divide-y divide-gray-100 w-[50%] border">
-            {records?.dimension?.length > 0 && (
-              <>
-                <li className="gap-x-3 py-3 bg-info px-2">Dimensions</li>
-                {map(records?.dimension, (record: string) => (
-                  <li className=" gap-x-3 p-2">{record}</li>
-                ))}
-              </>
-            )}
-          </ul>
-          <ul role="list" className="divide-y divide-gray-100 w-[50%] border">
-            {records?.metrics?.length > 0 && (
-              <>
-                <li className="flex justify-between gap-x-3 py-3 bg-info px-2">
-                  Metrics
-                </li>
-                {map(records?.metrics, (record: string) => (
-                  <li className="flex justify-between gap-x-3 p-2">{record}</li>
-                ))}
-              </>
-            )}
-          </ul>
+        <div className="grid gap-4 grid-cols-12">
+          <div className="col-span-6">
+            <h5 className="gap-x-3 py-3 bg-info px-2">Dimensions</h5>
+            <ul role="list" className="divide-y divide-gray-100 w-[50%] border">
+              {records?.dimension?.length > 0 && (
+                <>
+                  {records?.dimension.map((dimension: any) => (
+                    <li className=" gap-x-3 p-2">
+                      {dimension.name}
+                    </li>
+                  ))}
+                </>
+              )}
+            </ul>
+          </div>
+          <div className="col-span-6">
+            <h5 className="gap-x-3 py-3 bg-info px-2">Metrics</h5>
+            <ul role="list" className="divide-y divide-gray-100 w-[50%] border">
+              {records?.metrics?.length > 0 && (
+                <>
+                  {map(records?.metrics, (record: string) => (
+                    <li className="flex justify-between gap-x-3 p-2">{record}</li>
+                  ))}
+                </>
+              )}
+            </ul>
+          </div>
+          
         </div>
       )}
       {activeTab === "events" && (

@@ -37,10 +37,10 @@ const SchemaCreationPage = () => {
   };
 
   const onUpdate = useCallback(
-    (newRecords: any,programInfo:any) => {
+    (newRecords: any, programInfo:any) => {
       setLoading(true);
       userService
-        .generateIngestFiles(token, newRecords,programInfo)
+        .generateIngestFiles(token, newRecords, programInfo)
         .then((res) => {
           setLoading(false);
           swal("", "File Ingested successfully", "success");
@@ -85,8 +85,7 @@ const SchemaCreationPage = () => {
                   htmlFor="file-input"
                   className="px-2 cursor-pointer select-none inline-flex items-center font-demi"
                 >
-                  <BsUpload size="1rem" />
-                  &nbsp;&nbsp;Upload File
+                  <BsUpload size="1rem" /><span className="ml-3">Upload Event File</span>
                 </label>
               </div>
             </div>

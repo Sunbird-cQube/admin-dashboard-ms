@@ -2,8 +2,9 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import EditModal from "../edit-modal";
 import Pagination from "../pagination";
 
-const Table: FC<{ tabledata: any; showEdit?: boolean }> = ({
+const Table: FC<{ tabledata: any; commonErrors?: string[], showEdit?: boolean }> = ({
   tabledata,
+  commonErrors,
   showEdit = true,
 }) => {
   const [perPage, setPerPage] = useState(50);
@@ -83,6 +84,13 @@ const Table: FC<{ tabledata: any; showEdit?: boolean }> = ({
           )}
         </thead> */}
         <tbody>
+          {commonErrors && commonErrors.length > 0 && (
+            <div>
+              {commonErrors.map(commonError => (
+                <p style={{ fontSize: "10px", color: "red" }}>{commonError}</p>
+              ))}
+            </div>
+          )}
           {recordsToDisplay?.map((data: any, row: any) => {
             
             return (
