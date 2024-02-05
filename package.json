@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.1",
+    "@material-tailwind/react": "^2.1.5",
     "@types/lodash": "^4.14.198",
     "@types/node": "20.5.7",
     "@types/react": "18.2.21",

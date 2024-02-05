@@ -23,7 +23,7 @@ const DashboardPage = () => {
       title: 'Schema generator',
       imageUrl: 'assets/images/schema_creation.png',
       link: '/schemaCreation'
-    },
+    }
   ];
 
   const clickHandler = (data: any) => {

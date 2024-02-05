@@ -6,7 +6,7 @@ import Loader from "../fullscreenLoader";
 
 const UpdateFileRecords: FC<any> = ({ data, name, token }) => {
   const [records, setRecords] = useState(data);
-  const [filename, setFilename] = useState<any>(null);
+  const [filename, setFilename] = useState<any>('');
   const [fileContent, setFileContent] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const fetchFileContent = useCallback(
@@ -39,6 +39,7 @@ const UpdateFileRecords: FC<any> = ({ data, name, token }) => {
           value={filename}
           onChange={fetchFileContent}
         >
+          <option value="">Select File</option>
           {map(records, ({ name }) => (
             <option key={name}>{name}</option>
           ))}
