@@ -39,8 +39,8 @@ const MetricDimensionRecords: FC<any> = ({ data, token,goBack }) => {
             <ul role="list" className="divide-y divide-gray-100 w-[50%] border">
               {records?.dimension?.length > 0 && (
                 <>
-                  {records?.dimension.map((dimension: any) => (
-                    <li className=" gap-x-3 p-2">
+                  {records?.dimension.map((dimension: any, ind: number) => (
+                    <li key={ind} className=" gap-x-3 p-2">
                       {dimension.name}
                     </li>
                   ))}
