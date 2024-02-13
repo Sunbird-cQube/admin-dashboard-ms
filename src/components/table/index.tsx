@@ -86,8 +86,8 @@ const Table: FC<{ tabledata: any; commonErrors?: string[], showEdit?: boolean }>
         <tbody>
           {commonErrors && commonErrors.length > 0 && (
             <div>
-              {commonErrors.map(commonError => (
-                <p style={{ fontSize: "10px", color: "red" }}>{commonError}</p>
+              {commonErrors.map((commonError, ind) => (
+                <p key={ind} style={{ fontSize: "10px", color: "red" }}>{commonError}</p>
               ))}
             </div>
           )}
